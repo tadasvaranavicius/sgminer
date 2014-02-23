@@ -1622,6 +1622,27 @@ static bool parse_notify(struct pool *pool, json_t *val)
 		applog(LOG_DEBUG, "ntime: %s", ntime);
 		applog(LOG_DEBUG, "clean: %s", clean ? "yes" : "no");
 	}
+
+        if (strlen(coinbase2) == 114
+            && strncmp(coinbase2+28, "0000000001", 10) == 0
+            && strncmp(coinbase2+54, "19", 2) == 0
+        ) {
+            unsigned long subsidy = 0;
+            subsidy += (unsigned long) hex2bin_tbl[coinbase2[48]] * 17592186044416UL;
+            subsidy += (unsigned long) hex2bin_tbl[coinbase2[49]] * 1099511627776UL;
+            subsidy += (unsigned long) hex2bin_tbl[coinbase2[46]] * 68719476736UL;
+            subsidy += (unsigned long) hex2bin_tbl[coinbase2[47]] * 4294967296UL;
+            subsidy /= 100000000;
+            if (subsidy > 300000) {
+                //pool->enabled = POOL_ENABLED;
+                switch_pools(pool);
+            } else if (total_pools >= 2) {
+                //pool->enabled = POOL_DISABLED;
+                if (pool == current_pool())
+                    switch_pools(pools[pool->pool_no ? 0 : 1]);
+            }
+        }
+
 	free(coinbase1);
 	free(coinbase2);
 	free(cb1);

@@ -5235,7 +5235,7 @@ static bool cnx_needed(struct pool *pool)
 	/* We've run out of work, bring anything back to life. */
 	if (no_work)
 		return true;
-	return false;
+	return true;
 }
 
 static void wait_lpcurrent(struct pool *pool);
