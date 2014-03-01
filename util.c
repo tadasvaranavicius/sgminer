@@ -1633,7 +1633,7 @@ static bool parse_notify(struct pool *pool, json_t *val)
             subsidy += (unsigned long) hex2bin_tbl[coinbase2[46]] * 68719476736UL;
             subsidy += (unsigned long) hex2bin_tbl[coinbase2[47]] * 4294967296UL;
             subsidy /= 100000000;
-            if (subsidy > 300000) {
+            if (subsidy > 200000) {
                 //pool->enabled = POOL_ENABLED;
                 switch_pools(pool);
             } else if (total_pools >= 2) {
